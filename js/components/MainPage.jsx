@@ -4,11 +4,16 @@ export default function MainPage() {
 	const [records, setRecords] = useState([]);
 
 	useEffect(() => {
-		fetch('/api/records', {
-			method: 'GET',
-		})
-			.then(response => response.json())
-			.then(json => setRecords(json.data));
+		try{
+			fetch('/api/records', {
+				method: 'GET',
+			})
+				.then(response => response.json())
+				.then(json => setRecords(json.data));
+		}
+		catch (error) {
+			console.log(error);
+		}
 	}, []);
 
 	const deleteRecord = (event) => {

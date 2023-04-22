@@ -1,6 +1,6 @@
 import InsertPage from "@/js/components/InsertPage";
 
-export default function Home() {
+export default function Insert() {
   return (
       <InsertPage/>
   )
