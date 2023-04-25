@@ -82,25 +82,36 @@ export default function ChatComponent(props) {
 			const currentChatHistory = [...chatMessages, currentMessageObject];
 			const filteredChatHistory = filterChatHistory(currentChatHistory);
 
-			let response = await fetch('/api/answer', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
+			try {
+				let response = await fetch('/api/answer', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
 					},
-				body: JSON.stringify({
-					messages: filteredChatHistory,
-					type: 'michael_scott',
-				}),
-				signal: AbortSignal.timeout(10000),
-			})
-			response = await response.json();
+					body: JSON.stringify({
+						messages: filteredChatHistory,
+						type: 'michael_scott',
+					}),
+					signal: AbortSignal.timeout(20000),
+				})
+				response = await response.json();
 
-			event.target.disabled = false;
-			event.target.focus();
-			console.log(response);
+				event.target.disabled = false;
+				event.target.focus();
+				console.log(response);
 
-			const responseMessageObject = buildResponseMessageObject(response);
-			setChatMessages(prevChat => [...prevChat, responseMessageObject]);
+				const responseMessageObject = buildResponseMessageObject(response);
+				setChatMessages(prevChat => [...prevChat, responseMessageObject]);
+			}
+			catch (error) {
+				event.target.disabled = false;
+				event.target.focus();
+				console.log(error);
+
+				const responseMessageObject = buildResponseMessageObject(ERRORS.OPEN_AI_ERROR);
+				setChatMessages(prevChat => [...prevChat, responseMessageObject]);
+			}
+
 		}
 	};
 
